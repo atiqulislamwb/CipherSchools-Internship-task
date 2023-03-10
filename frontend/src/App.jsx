@@ -11,11 +11,11 @@ function App() {
       <div className="w-[300px] ">
         <Sidebar />
       </div>
-      <div className="overflow-y-auto p-5">
+      <div className="overflow-y-auto p-5 w-full">
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/video/:id" element={<VideoDetails />} />
+          <Route path="/videos/:id" element={<VideoDetails />} />
           <Route path="/*" element={<Error />} />
         </Routes>
       </div>

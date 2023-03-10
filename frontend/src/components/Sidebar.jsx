@@ -3,14 +3,15 @@ import { BsBrowserEdge } from "react-icons/bs";
 import { AiOutlineHeart, AiOutlineLogout, AiOutlineWifi } from "react-icons/ai";
 import { GoCalendar } from "react-icons/go";
 import { BsDot, BsFillArrowDownCircleFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
 const Sidebar = () => {
   return (
     <div className="border-r border-[#A8A8A8] p-10 h-screen ">
       <div className="border-b border-gray-200">
-        <div className="mb-10 text-3xl text-red-500 font-bold">
-          Streaming.Video
-        </div>
-        <div>
+        <Link to="/" className="mb-10 text-3xl text-black font-bold">
+          VIDEO<span className="text-red-500">.MATE</span>
+        </Link>
+        <div className="mt-10">
           <p>News Feed</p>
           <div className="flex items-center gap-6 mt-5 ">
             <p>
@@ -39,7 +40,7 @@ const Sidebar = () => {
         <div className="mt-10">
           <p>Following</p>
           <div className="flex items-center gap-6 mt-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-7/12">
               <img
                 className="w-8 h-8 object-cover rounded-full"
                 src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8cGVyc29uYXxlbnwwfHwwfHw%3D&w=1000&q=80"
@@ -51,7 +52,7 @@ const Sidebar = () => {
             </p>
           </div>
           <div className="flex items-center gap-6 mt-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-7/12">
               <img
                 className="w-8 h-8 object-cover rounded-full"
                 src="https://images.healthshots.com/healthshots/en/uploads/2020/12/08182549/positive-person.jpg"
@@ -63,7 +64,7 @@ const Sidebar = () => {
             </p>
           </div>
           <div className="flex items-center gap-6 mt-2">
-            <div className="flex items-center gap-2 ">
+            <div className="flex items-center gap-2  w-7/12">
               <img
                 className="w-8 h-8 object-cover rounded-full"
                 src="https://cdn.hswstatic.com/gif/play/0b7f4e9b-f59c-4024-9f06-b3dc12850ab7-1920-1080.jpg"
@@ -75,7 +76,7 @@ const Sidebar = () => {
             </p>
           </div>
           <div className="flex items-center gap-6 mt-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-7/12">
               <img
                 className="w-8 h-8 object-cover rounded-full"
                 src="https://cdn2.psychologytoday.com/assets/styles/manual_crop_1_91_1_1528x800/public/field_blog_entry_images/2018-09/shutterstock_648907024.jpg?itok=7lrLYx-B"
@@ -88,7 +89,7 @@ const Sidebar = () => {
           </div>
           <div className="mt-10 mb-10">
             <div className="flex items-center gap-4">
-              <BsFillArrowDownCircleFill color="#8E221B" />
+              <BsFillArrowDownCircleFill color="#8E221B" size={28} />
               <p>Load more</p>
             </div>
           </div>
