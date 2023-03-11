@@ -24,6 +24,8 @@ const connect = async () => {
 
 const _db = client.db("cipherSchools");
 const Videos = _db.collection("videos");
+const Comments = _db.collection("comments");
+const Reply = _db.collection("replies");
 
 app.post("/videos", async (req, res) => {
   try {
@@ -70,6 +72,47 @@ app.patch("/videos/:id/view", async (req, res) => {
       res.send(result);
     }
   );
+});
+
+//comments
+app.post("/comments", async (req, res) => {
+  try {
+    const newData = req.body;
+    await Comments.insertOne(newData);
+    res
+      .status(201)
+      .json({ status: true, message: "comment added successfully" });
+  } catch (error) {
+    res.status(400).json({ status: false, message: error.message });
+  }
+});
+
+app.get("/comments", async (req, res) => {
+  try {
+    const comments = await Comments.find({}).toArray();
+    res.status(201).json({ status: true, data: comments });
+  } catch (error) {
+    res.status(400).json({ status: false, message: error.message });
+  }
+});
+
+app.post("/reply", async (req, res) => {
+  try {
+    const newData = req.body;
+    await Reply.insertOne(newData);
+    res.status(201).json({ status: true, message: "Reply added successfully" });
+  } catch (error) {
+    res.status(400).json({ status: false, message: error.message });
+  }
+});
+
+app.get("/reply", async (req, res) => {
+  try {
+    const comments = await Reply.find({}).toArray();
+    res.status(201).json({ status: true, data: comments });
+  } catch (error) {
+    res.status(400).json({ status: false, message: error.message });
+  }
 });
 
 app.get("/", async (req, res) => {

@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
-const useComments = () => {
+const useReply = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["comments"],
+    queryKey: ["reply"],
     queryFn: () =>
-      fetch(`http://localhost:4000/comments`, {
+      fetch(`http://localhost:4000/reply`, {
         method: "GET",
         headers: {
           "content-type": "application/json",
@@ -15,4 +15,4 @@ const useComments = () => {
   return { data, isLoading, isError, error, refetch };
 };
 
-export default useComments;
+export default useReply;

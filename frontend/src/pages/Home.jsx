@@ -5,7 +5,7 @@ import useVideos from "../hooks/useVideos";
 const Home = () => {
   const { data, isLoading } = useVideos();
   return (
-    <div className="p-3">
+    <div className="p-3 overflow-y-auto">
       <div className="flex flex-wrap gap-6 mt-10">
         {data?.data?.map((video, i) => (
           <VideoCard video={video} key={i} />

@@ -25,19 +25,21 @@ const VideoCard = ({ video }) => {
       />
       <div className="flex gap-3 mt-3">
         <div>
-          <img
-            src={video?.channel_thumbnail}
-            alt={video?.title}
-            className="w-12 h-12 object-fit rounded-full"
-          />
+          <div className="w-10 h-10 object-fit rounded-full">
+            <img
+              src={video?.channel_thumbnail}
+              alt=""
+              className="w-full h-full rounded-full"
+            />
+          </div>
         </div>
         <div>
-          <p>{video.title}</p>
-          <p>{video.channel}</p>
+          <p>{video?.title}</p>
+          <p>{video?.channel}</p>
           <div className="flex gap-3 mt-1 items-center">
-            <p>{video.views} views</p>
+            <p>{video?.views} views</p>
             <p className="w-1 h-1 rounded-full bg-gray-500"></p>
-            <p>{video.publishedAt}</p>
+            <p>{video?.publishedAt}</p>
           </div>
         </div>
       </div>

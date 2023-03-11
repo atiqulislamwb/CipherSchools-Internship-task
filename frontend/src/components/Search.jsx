@@ -9,7 +9,7 @@ const Search = () => {
         name="search"
         placeholder="Search"
       />
-      <div class="absolute top-[17px] mx-auto left-3 bottom-0">
+      <div className="absolute top-[17px] mx-auto left-3 bottom-0">
         <BsSearch color="" className="text-xl" />
       </div>
       <button type="submit" class="absolute right-0 top-0 mt-5 mr-4"></button>
