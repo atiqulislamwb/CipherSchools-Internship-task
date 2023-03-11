@@ -38,7 +38,7 @@ const Comment = ({ comment }) => {
       author: user?.name,
     };
 
-    fetch(`http://localhost:4000/reply`, {
+    fetch(`https://cihpherschools.vercel.app/reply`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -55,7 +55,7 @@ const Comment = ({ comment }) => {
       });
   };
   const replies = data?.data?.filter((item) => item?.commentId == comment?._id);
-  console.log(replies);
+
   return (
     <div>
       <div className="flex gap-2 mt-5">
@@ -69,7 +69,7 @@ const Comment = ({ comment }) => {
         <div className="">
           <div className="flex gap-1 items-center">
             <p>{comment.author}</p>
-            <p className="ml-3 text-sm">{timeString} ago</p>
+            <p className="ml-3 text-sm">{timeString.slice(0, 10)} ago</p>
           </div>
           <p>{comment.comment}</p>
           <div className="flex gap-3 items-center ml-3">
@@ -100,7 +100,7 @@ const Comment = ({ comment }) => {
                   value={reply}
                   onChange={(e) => setReply(e.target.value)}
                   placeholder="Add a comment"
-                  className="sm:w-[35vw] bg-[#F2F2F2] w-[10vw] px-5 py-1 border-b-[1px] outline-none border-gray-700"
+                  className="sm:w-[35vw] bg-[#F2F2F2] w-[220px] px-5 py-1 border-b-[1px] outline-none border-gray-700"
                 />
                 {
                   <div>
@@ -141,14 +141,16 @@ const Comment = ({ comment }) => {
                         item?.authorImage ||
                         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTD_qytX9Ikua6d7XiFxSQUwz5t7VCNpwo_tNdS8fC3g&s"
                       }
-                      alt={item.author}
+                      alt={item?.author}
                       className="w-full h-full rounded-full"
                     />
                   </div>
                   <div className="">
                     <div className="flex items-center">
                       <p>{item?.author || "Anonymous"}</p>
-                      <p className="ml-3 text-sm">{timeString} ago</p>
+                      <p className="ml-3 text-sm">
+                        {timeString.slice(0, 6)} ago
+                      </p>
                     </div>
                     <p>{item?.reply}</p>
                     <div className="flex gap-3 items-center ml-3">

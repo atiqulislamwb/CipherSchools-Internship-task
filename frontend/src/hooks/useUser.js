@@ -1,5 +1,3 @@
-import React from "react";
-
 const useUser = () => {
   //next i will implement it real user and authentication
   const user = {

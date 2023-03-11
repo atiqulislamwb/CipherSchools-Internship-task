@@ -9,7 +9,7 @@ const Sidebar = () => {
     <div className="border-r border-[#A8A8A8] p-10 h-screen ">
       <div className="border-b border-gray-200">
         <Link to="/" className="mb-10 text-3xl text-black font-bold">
-          VIDEO<span className="text-red-500">.MATE</span>
+          VID<span className="text-red-500">.MATE</span>
         </Link>
         <div className="mt-10">
           <p>News Feed</p>

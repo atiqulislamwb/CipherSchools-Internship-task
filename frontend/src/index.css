@@ -21,3 +21,49 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.bar {
+  width: 6px;
+  height: 26px;
+  margin: 0 3px;
+  border-radius: 3px;
+  animation: loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+.bar:nth-child(1) {
+  background-color: #feda75;
+  animation-delay: -0.45s;
+}
+
+.bar:nth-child(2) {
+  background-color: #f58529;
+  animation-delay: -0.3s;
+}
+
+.bar:nth-child(3) {
+  background-color: #dd2e44;
+  animation-delay: -0.15s;
+}
+
+.bar:nth-child(4) {
+  background-color: #3feee6;
+  animation-delay: 0s;
+}
+
+@keyframes loading {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1, 2.5);
+  }
+  40% {
+    transform: scale(1);
+  }
+}

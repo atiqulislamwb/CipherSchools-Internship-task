@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 
 const VideoCard = ({ video }) => {
   const handViewsIncrease = (id) => {
-    fetch(`http://localhost:4000/videos/${id}/view`, { method: "PATCH" })
+    fetch(`https://cihpherschools.vercel.app/videos/${id}/view`, {
+      method: "PATCH",
+    })
       .then((response) => response.json())
       .then((video) => {
         console.log(`Video ${video._id} has ${video.views} views`);
@@ -14,14 +16,14 @@ const VideoCard = ({ video }) => {
   };
   return (
     <Link
-      className="animate-slideup w-full sm:w-[350px] "
+      className="animate-slide-up w-full sm:w-[350px] "
       to={`/videos/${video?._id}`}
       onClick={() => handViewsIncrease(video?._id)}
     >
       <img
         src={video?.thumbnail}
         alt={video?.title}
-        className="w-[350px] h-[200px] rounded-lg object-cover"
+        className="sm:w-[350px]  sm:h-[200px] rounded-lg object-cover"
       />
       <div className="flex gap-3 mt-3">
         <div>
@@ -34,12 +36,18 @@ const VideoCard = ({ video }) => {
           </div>
         </div>
         <div>
-          <p>{video?.title}</p>
-          <p>{video?.channel}</p>
-          <div className="flex gap-3 mt-1 items-center">
+          <p className="text-sm sm:text-[16px]   font-bold">{video?.title}</p>
+          <p className="hidden sm:block">{video?.channel}</p>
+          <div className="sm:hidden  flex-row flex gap-3 items-center text-sm">
+            <p>{video?.channel}</p>
             <p>{video?.views} views</p>
             <p className="w-1 h-1 rounded-full bg-gray-500"></p>
-            <p>{video?.publishedAt}</p>
+            <p>{video?.publishedAt} ago</p>
+          </div>
+          <div className="flex gap-3 mt-1 items-center">
+            <p className="hidden sm:block">{video?.views} views</p>
+            <p className="w-1 h-1 rounded-full bg-gray-500 hidden sm:block"></p>
+            <p className="hidden sm:block">{video?.publishedAt} ago</p>
           </div>
         </div>
       </div>

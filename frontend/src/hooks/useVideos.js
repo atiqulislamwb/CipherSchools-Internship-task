@@ -4,7 +4,7 @@ const useVideos = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["videos"],
     queryFn: () =>
-      fetch(`http://localhost:4000/videos`, {
+      fetch(`https://cihpherschools.vercel.app/videos`, {
         method: "GET",
         headers: {
           "content-type": "application/json",

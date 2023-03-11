@@ -1,8 +1,12 @@
 const express = require("express");
 const { MongoClient, ObjectId, ServerApiVersion } = require("mongodb");
 const cors = require("cors");
+const http = require("http");
+const socketIo = require("socket.io");
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 require("dotenv").config();
 
 app.use(express.json());
@@ -26,6 +30,7 @@ const _db = client.db("cipherSchools");
 const Videos = _db.collection("videos");
 const Comments = _db.collection("comments");
 const Reply = _db.collection("replies");
+const Notification = _db.collection("notifications");
 
 app.post("/videos", async (req, res) => {
   try {
@@ -115,14 +120,92 @@ app.get("/reply", async (req, res) => {
   }
 });
 
+//likes update
+app.post("/videos/:id/like", (req, res) => {
+  const videoId = req.params.id;
+  const userId = req.body.userId;
+
+  // assuming you're sending the user ID in the request body
+  // add the user ID to the "likedBy" array in the post document
+  Videos.updateOne(
+    { _id: new ObjectId(videoId) },
+    { $addToSet: { likes: userId } },
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: err });
+      } else {
+        res.json({ message: "video liked!" });
+        res.send(result);
+      }
+    }
+  );
+});
+
+app.post("/videos/:id/dislike", (req, res) => {
+  const videoId = req.params.id;
+  const userId = req.body.userId;
+  console.log(videoId, userId);
+  // assuming you're sending the user ID in the request body
+  // remove the user ID from the "likedBy" array in the post document
+  Videos.updateOne(
+    { _id: new ObjectId(videoId) },
+    { $pull: { likes: userId } },
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: err });
+      } else {
+        res.json({ message: "Video disliked!" });
+        res.send(result);
+      }
+    }
+  );
+});
+
+//notification
+
+app.post("/notifications", async (req, res) => {
+  try {
+    const newData = req.body;
+    await Notification.insertOne(newData);
+    res
+      .status(201)
+      .json({ status: true, message: "notification added successfully" });
+  } catch (error) {
+    res.status(400).json({ status: false, message: error.message });
+  }
+});
+
+app.get("/notifications/:userId", async (req, res) => {
+  try {
+    const notifications = await Notification.find({
+      recipient: req.params.userId,
+    }).toArray();
+    res.json(notifications);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 app.get("/", async (req, res) => {
+  io.on("connection", (socket) => {
+    console.log("New client connected");
+
+    socket.on("new-notification", (data) => {
+      console.log("New notification received:", data);
+      socket.broadcast.emit("notification", data);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Client disconnected");
+    });
+  });
   res.status(400).json({ message: "hello world running" });
 });
 app.use("/*", async (req, res) => {
   res.status(400).json({ message: "The Route doesn't exist" });
 });
 
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
   await connect();
 
   console.log("database connection established");

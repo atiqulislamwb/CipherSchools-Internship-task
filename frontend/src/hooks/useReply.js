@@ -5,7 +5,7 @@ const useReply = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["reply"],
     queryFn: () =>
-      fetch(`http://localhost:4000/reply`, {
+      fetch(`https://cihpherschools.vercel.app/reply`, {
         method: "GET",
         headers: {
           "content-type": "application/json",

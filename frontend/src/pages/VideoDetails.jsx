@@ -3,7 +3,7 @@ import ReactPlayer from "react-player";
 import { useParams } from "react-router-dom";
 import useVideoDetails from "../hooks/useVideoDetails";
 import { RiShareForwardLine } from "react-icons/ri";
-import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+import { AiOutlineLike, AiFillLike, AiOutlineDislike } from "react-icons/ai";
 import { HiScissors } from "react-icons/hi";
 import { TbPlaylistAdd } from "react-icons/tb";
 import { BsThreeDots } from "react-icons/bs";
@@ -13,13 +13,19 @@ import useUser from "../hooks/useUser";
 import { toast } from "react-hot-toast";
 import useComments from "./../hooks/useComments";
 import Comment from "../components/Comment";
+import Loader from "../components/Loader";
+import Share from "../components/Share";
 
 const VideoDetails = () => {
-  const { user } = useUser();
+  const [isLiked, setIsLiked] = useState(false);
   const [comment, setComment] = useState("");
+  const { user } = useUser();
+  console.log(user);
+
   const { id } = useParams();
-  const { video, isLoading } = useVideoDetails({ id });
+  const { video, isLoading, refetch: videoRefetch } = useVideoDetails({ id });
   const { data, isLoading: commentLoading, refetch } = useComments();
+  //const [likes, setLikes] = useState(video?.likes);
   const handleComment = () => {
     const data = {
       videoId: video?._id,
@@ -29,7 +35,7 @@ const VideoDetails = () => {
       timestamp: new Date(),
       replies: [],
     };
-    fetch(`http://localhost:4000/comments`, {
+    fetch(`https://cihpherschools.vercel.app/comments`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -48,20 +54,76 @@ const VideoDetails = () => {
   const filteredComments = data?.data?.filter(
     (item) => item?.videoId == video?._id
   );
+
+  const handleLike = () => {
+    console.log("like");
+    fetch(`https://cihpherschools.vercel.app/videos/${video._id}/like`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: user?.id }), // assuming you have a user ID
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          //setLikes(data.likes);
+          toast.success("Video Liked");
+          setIsLiked(true);
+          videoRefetch();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleDislike = () => {
+    console.log("dislike");
+    fetch(`https://cihpherschools.vercel.app/videos/${video._id}/dislike`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: user?.id }), // assuming you have a user ID
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          //setLikes(data.likes);
+          setIsLiked(false);
+          videoRefetch();
+          toast.success("Video Disliked");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  if (isLoading) return <Loader />;
+
   return (
-    <div className="p-5 overflow-y-auto ">
-      <div className="flex w-full gap-4 flex-row">
-        <div className="w-full sm:w-9/12">
-          <ReactPlayer
-            className="w-full sm:h-[60vh] h-[45vh]"
-            controls
-            url={video?.url}
-            width="100%"
-            height="600px"
-          />
+    <div className="sm:p-5 overflow-y-auto mb-10 overflow-x-hidden ">
+      <div className="flex w-full gap-4 sm:flex-row flex-col">
+        <div className="w-full sm:w-9/12 ">
+          <div className="hidden sm:block">
+            <ReactPlayer
+              className="w-full   sm:h-[60vh] "
+              controls
+              url={video?.url}
+              width="100%"
+              height="600px"
+            />
+          </div>
+          <div className="sm:hidden block">
+            <ReactPlayer
+              className="w-full  "
+              controls
+              url={video?.url}
+              width="100%"
+              height="200px"
+            />
+          </div>
           <div className="w-full">
             <p className="font-bold text-xl m-2">{video?.title}</p>
-            <div className="flex flex-row items-center justify-between mt-2">
+            <div className="flex sm:flex-row flex-col sm:items-center justify-between mt-2">
               <div className="flex gap-2">
                 <div className="w-10 h-10 object-fit rounded-full">
                   <img
@@ -80,34 +142,35 @@ const VideoDetails = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex flex-row flex-wrap items-center gap-4">
-                <div
-                  className="bg-gray-300 text-black flex 
+              <div className="flex mt-3 sm:mt-0 flex-row flex-wrap items-center gap-4">
+                <button
+                  onClick={isLiked ? handleDislike : handleLike}
+                  className="  hover:bg-gray-400 bg-gray-300 cursor-pointer text-black flex 
                  py-2 px-8 rounded-3xl items-center gap-2"
                 >
-                  <button className="border-r border-gray-500">
+                  {isLiked ? (
+                    <AiFillLike size={22} />
+                  ) : (
                     <AiOutlineLike size={22} />
-                  </button>
-                  <button>
-                    <AiOutlineDislike size={22} />
-                  </button>
-                </div>
-                <div className="flex items-center gap-2 bg-gray-300 text-black py-2 px-3 rounded-3xl">
+                  )}
+
+                  <span>{video?.likes?.length}</span>
+                </button>
+                <button className="hover:bg-gray-400 cursor-pointer flex items-center gap-2 bg-gray-300 text-black py-2 px-3 rounded-3xl">
                   <RiShareForwardLine size={22} />
-                  <button>Share</button>
-                </div>
+                  <Share videoId={video?.url} />
+                </button>
+
                 <div
-                  title="clip"
-                  className="flex items-center gap-2 bg-gray-300 text-black py-2 px-3 rounded-3xl"
+                  onClick={() => {
+                    toast.success("video save and i implement this later");
+                  }}
+                  className=" hover:bg-gray-400 cursor-pointer flex items-center gap-2 bg-gray-300 text-black py-2 px-3 rounded-3xl"
                 >
-                  <HiScissors size={22} />
-                  <button>Clip</button>
-                </div>
-                <div className="flex items-center gap-2 bg-gray-300 text-black py-2 px-3 rounded-3xl">
                   <TbPlaylistAdd size={22} />
                   <button>Save</button>
                 </div>
-                <div className="flex items-center gap-2 bg-gray-300 text-black py-2 px-2 rounded-3xl">
+                <div className=" hover:bg-gray-400 flex items-center gap-2 bg-gray-300 text-black py-2 px-2 rounded-3xl">
                   <BsThreeDots size={22} />
                 </div>
               </div>
@@ -143,7 +206,7 @@ const VideoDetails = () => {
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         placeholder="Add a comment"
-                        className="sm:w-[35vw] bg-[#F2F2F2] w-[10vw] px-5 py-1 border-b-[1px] outline-none border-gray-700"
+                        className="sm:w-[35vw] bg-[#F2F2F2] w-[230px] px-5 py-1 border-b-[1px] outline-none border-gray-700"
                       />
                     </div>
                     <div>
@@ -177,7 +240,7 @@ const VideoDetails = () => {
             </div>
           </div>
         </div>
-        <div>Related videos</div>
+        <div className="hidden sm:block">Related videos</div>
       </div>
     </div>
   );
