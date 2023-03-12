@@ -1,5 +1,5 @@
 # CipherSchools-Internship-task
-# Website live link : https://vidmate2023.netlify.app(https://vidmate2023.netlify.app/)
+# Website live link : [https://vidmate2023.netlify.app](https://vidmate2023.netlify.app)
 #Feature--->
 
 #Frontend Task:
